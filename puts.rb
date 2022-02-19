@@ -1,19 +1,24 @@
 require 'ripper'
 
 def separate_by word
-  "===" * 10 + word + "===" * 10
+  puts "===" * 10 + word  + "===" * 10
+end
+
+def expalin code, title
+  separate_by title
+
+  separate_by "AST"
+  pp Ripper.sexp(code)
+
+  separate_by "YARV"
+  puts RubyVM::InstructionSequence.compile(code).disasm
 end
 
 code = <<STR
   puts 2 + 2
 STR
 
-puts code
-puts separate_by "AST"
-pp Ripper.sexp(code)
-
-puts separate_by "YARV"
-puts RubyVM::InstructionSequence.compile(code).disasm
+expalin(code, "Simple +")
 
 # Ruby の内部では関数とメソッドを区別している
 # - メソッド呼び出しは明確なレシーバーを持ち
@@ -25,10 +30,20 @@ code = <<STR
   end
 STR
 
-puts code
+expalin(code, "With Block")
 
-puts separate_by "AST"
-pp Ripper.sexp(code)
+code = <<STR
+  def add_two(a, b = 5)
+    sum = a + B
+  end
+STR
 
-puts separate_by "YARV"
-puts RubyVM::InstructionSequence.compile(code).disasm
+expalin(code, "With Two Argument")
+
+code = <<STR
+  def complex_formula(a, b, *args, c)
+    a + b + args.size + c
+  end
+STR
+
+expalin(code, "Complex Formula")

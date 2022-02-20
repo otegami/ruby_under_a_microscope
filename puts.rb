@@ -47,3 +47,11 @@ code = <<STR
 STR
 
 expalin(code, "Complex Formula")
+
+code = <<STR
+  def add_two_keyword(a, b: 5)
+    sum = a + b
+  end
+STR
+
+expalin(code, "Add Two Keyword")

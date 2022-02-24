@@ -1,4 +1,4 @@
-require '../helper'
+require_relative '../helper'
 
 code = <<STR
   def display_string

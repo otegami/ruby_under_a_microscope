@@ -23,3 +23,33 @@ require 'benchmark'
 
   GC.disable 
 end
+
+# ハッシュテーブルの密度を常に一定に保つように、Ruby 側で制御する
+# 普段は、定数で密度が 5 以下になるようになっている
+100.times do |size|
+  hashes = []
+  10000.times do
+    hash = {}
+    (1..size).each do
+      hash[rand] = rand
+    end
+    hashes << hash
+  end
+
+  GC.disable
+
+  Benchmark.bm do |bench|
+    bench.report("adding element number #{size + 1}") do
+      10000.times do |n|
+        hashes[n][size] = rand
+      end
+    end
+  end
+
+  GC.enable
+end
+
+# ハッシュ関数には素数を利用して計算を行なっている
+# 'abc'.hash => 2577755198929737024
+# irb を再起動、起動時ごとに利用される seed 値は変更される
+# 'abc'.hash => -4013029504646958266

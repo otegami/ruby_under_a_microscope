@@ -41,11 +41,38 @@ require 'benchmark'
 
 # 現在の Ruby では差異はかなり少ない、どのような変更が入ったのだろうか？
 
+# def message_function
+#   str = "The quick brown fox"
+#   lambda do |animal|
+#     puts "#{str} jumps over the lazy #{animal}"
+#   end
+# end
+
+# function_value = message_function
+# function_value.call('dog')
+
+# def add_number
+#   sum = 0
+#   lambda do |number|
+#     sum += number
+#   end
+# end
+
+# function_value = add_number
+# function_value.call(3)
+
+# 戻り値が、lambda or proc ならスタックフレームをヒープにコピーする
+# 実行時にはコピー先のヒープ内を参照するためクロージャーになっているのかな？
+
 def message_function
   str = "The quick brown fox"
-  lambda do |animal|
+  func = lambda do |animal|
     puts "#{str} jumps over the lazy #{animal}"
   end
+  # ここまでで、ヒープ側に全てコピーされ、参照する EP もコピー先に変わる
+  # そのため、str の値を更新してもコピー先を参照するようになっているので値が変化する
+  str = "The sly brown fox"
+  func
 end
 
 function_value = message_function

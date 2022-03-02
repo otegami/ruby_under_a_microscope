@@ -64,16 +64,31 @@ require 'benchmark'
 # 戻り値が、lambda or proc ならスタックフレームをヒープにコピーする
 # 実行時にはコピー先のヒープ内を参照するためクロージャーになっているのかな？
 
-def message_function
-  str = "The quick brown fox"
-  func = lambda do |animal|
-    puts "#{str} jumps over the lazy #{animal}"
-  end
-  # ここまでで、ヒープ側に全てコピーされ、参照する EP もコピー先に変わる
-  # そのため、str の値を更新してもコピー先を参照するようになっているので値が変化する
-  str = "The sly brown fox"
-  func
-end
+# def message_function
+#   str = "The quick brown fox"
+#   func = lambda do |animal|
+#     puts "#{str} jumps over the lazy #{animal}"
+#   end
+#   # ここまでで、ヒープ側に全てコピーされ、参照する EP もコピー先に変わる
+#   # そのため、str の値を更新してもコピー先を参照するようになっているので値が変化する
+#   str = "The sly brown fox"
+#   func
+# end
 
-function_value = message_function
-function_value.call('dog')
+# function_value = message_function
+# function_value.call('dog')
+
+i = 0
+increment_function = lambda do
+  i+=1
+  puts "incrementing from #{i-1} to #{i}"
+end
+decrement_function = lambda do
+  i-=1
+  puts "decrementing from #{i+1} to #{i}"
+end
+increment_function.call
+decrement_function.call
+increment_function.call
+increment_function.call
+decrement_function.call

@@ -69,13 +69,37 @@
 
 # eval("puts a+b", get_binding)
 
+# class Quote
+#   def initialize
+#     @str = "The quick brown fox"
+#   end
+# end
+# str2 = "jumps over the lazy dog."
+# obj = Quote.new
+# obj.instance_eval do
+#   puts "#{@str} #{str2}"
+# end
+
 class Quote
   def initialize
     @str = "The quick brown fox"
   end
+  # define_method :display do
+  #   puts @str
+  # end
 end
-str2 = "jumps over the lazy dog."
-obj = Quote.new
-obj.instance_eval do
-  puts "#{@str} #{str2}"
+
+# def create_method_using_a_closure
+#   str2 = "jumps over the lazy dog."
+#   Quote.send(:define_method, :display) do
+#     puts "#{@str} #{str2}"
+#   end
+# end
+
+def create_method_using_a_closure
+  str2 = "jumps over the lazy dog."
+  ->{ puts "#{@str} #{str2}" }
 end
+
+Quote.send(:define_method, :display, create_method_using_a_closure)
+Quote.new.display
